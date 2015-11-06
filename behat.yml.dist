@@ -4,12 +4,13 @@ default:
       Nubeiro\DoctrineAwareContext\Extension:
         databases:
            -
-              driver: pdo_mysql
-              host: 10.10.0.3
-              dbname: pbiz_users
-              user: pbiz_users_user
-              password: pbiz_users_pass
-              entity_manager: usersEm
+               driver: pdo_mysql
+               host: 10.10.0.3
+               dbname: pbiz_users
+               user: pbiz_users_user
+               password: pbiz_users_pass
+               entity_manager: usersEm
+               mapping_paths: [ somepath, someother]
            -
                driver: pdo_mysql
                host: 10.10.0.3
@@ -17,4 +18,5 @@ default:
                user: pbiz_datas_user
                password: pbiz_datas_pass
                entity_manager: datasEm
+               mapping_paths: [ somepath, someother]
 
