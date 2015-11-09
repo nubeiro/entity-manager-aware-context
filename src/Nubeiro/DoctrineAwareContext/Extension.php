@@ -9,6 +9,9 @@ use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 
 class Extension implements ExtensionInterface
 {
@@ -56,22 +59,81 @@ class Extension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $this->addDbalSection($builder);
+        $this->addOrmSection($builder);
+    }
+
+    private function addOrmSection(ArrayNodeDefinition $node)
+    {
+        $node
             ->children()
-            ->arrayNode('databases')
-                ->isRequired()
-                    ->prototype('array')
-                        ->children()
-                            ->scalarNode('driver')->isRequired()->end()
-                            ->scalarNode('host')->isRequired()->end()
-                            ->scalarNode('dbname')->isRequired()->end()
-                            ->scalarNode('user')->isRequired()->end()
-                            ->scalarNode('password')->isRequired()->end()
-                            ->scalarNode('entity_manager')->isRequired()->end()
-                        ->end()
-                    ->end()
+            ->arrayNode('orm')
+                ->fixXmlConfig('entity_manager')
+                ->append($this->getOrmEntityManagersNode())
+            ->end()
+        ;
+    }
+
+    private function getOrmEntityManagersNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('entity_managers');
+        $node
+            ->requiresAtLeastOneElement()
+            ->useAttributeAsKey('name')
+            ->prototype('array')
+                ->children()
+                    ->scalarNode('connection')->end()
                 ->end()
-            ->end();
+                ->fixXmlConfig('mapping')
+                ->children()
+                    ->arrayNode('mappings')
+                    ->requiresAtLeastOneElement()
+                    ->prototype('scalar')->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    private function addDbalSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+            ->arrayNode('dbal')
+            ->append($this->getDbalConnectionsNode());
+    }
+
+    private function getDbalConnectionsNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('connections');
+
+        /** @var $connectionNode ArrayNodeDefinition */
+        $connectionNode = $node
+            ->requiresAtLeastOneElement()
+            ->useAttributeAsKey('name')
+            ->prototype('array')
+        ;
+
+        $this->configureDbalDriverNode($connectionNode);
+
+        $connectionNode
+            ->children()
+            ->scalarNode('driver')->defaultValue('pdo_mysql')->end();
+
+        return $node;
+    }
+
+    private function configureDbalDriverNode(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+            ->scalarNode('dbname')->end()
+            ->scalarNode('host')->defaultValue('localhost')->end()
+            ->scalarNode('user')->defaultValue('root')->end()
+            ->scalarNode('password')->defaultNull()->end()
+        ;
     }
 
     /**

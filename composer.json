@@ -16,8 +16,10 @@
     "php": "^5.6",
     "behat/behat": "3.*@stable",
     "doctrine/orm" : "@stable",
+    "doctrine/dbal" : "@stable",
     "symfony/config": "@stable",
-    "symfony/dependency-injection": "@stable"
+    "symfony/dependency-injection": "@stable",
+    "symfony/doctrine-bridge": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*"
