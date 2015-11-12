@@ -3,14 +3,16 @@
  * Extension
  */
 
-namespace Nubeiro\DoctrineAwareContext;
+namespace Nubeiro\EntityManagerAwareContext;
 
+use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 
 class Extension implements ExtensionInterface
@@ -24,7 +26,6 @@ class Extension implements ExtensionInterface
      */
     public function process(ContainerBuilder $container)
     {
-        // TODO: Implement process() method.
     }
 
     /**
@@ -49,7 +50,6 @@ class Extension implements ExtensionInterface
      */
     public function initialize(ExtensionManager $extensionManager)
     {
-        // TODO: Implement initialize() method.
     }
 
     /**
@@ -63,12 +63,23 @@ class Extension implements ExtensionInterface
         $this->addOrmSection($builder);
     }
 
+    /**
+     * Loads extension services into temporary container.
+     *
+     * @param ContainerBuilder $container
+     * @param array $config
+     */
+    public function load(ContainerBuilder $container, array $config)
+    {
+        $this->loadManagerRegistry($container, $config);
+        $this->loadContextInitializer($container);
+    }
+
     private function addOrmSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
             ->arrayNode('orm')
-                ->fixXmlConfig('entity_manager')
                 ->append($this->getOrmEntityManagersNode())
             ->end()
         ;
@@ -85,7 +96,6 @@ class Extension implements ExtensionInterface
                 ->children()
                     ->scalarNode('connection')->end()
                 ->end()
-                ->fixXmlConfig('mapping')
                 ->children()
                     ->arrayNode('mappings')
                     ->requiresAtLeastOneElement()
@@ -136,14 +146,24 @@ class Extension implements ExtensionInterface
         ;
     }
 
-    /**
-     * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array $config
-     */
-    public function load(ContainerBuilder $container, array $config)
+    private function loadManagerRegistry(ContainerBuilder $container, array $config)
     {
-        // TODO: Implement load() method.
+        $container->setDefinition(
+            self::NUBEIRO_DAC_ID,
+            new Definition('Nubeiro\DoctrineAwareContext\ManagerRegistry', array($config))
+        );
+    }
+
+    private function loadContextInitializer(ContainerBuilder $container)
+    {
+        $definition = new Definition(
+            'Nubeiro\EntityManagerAwareContext\Context\Initializer\EntityManagerAwareInitializer',
+            array(
+                new Reference(self::NUBEIRO_DAC_ID)
+            )
+        );
+
+        $definition->addTag(ContextExtension::INITIALIZER_TAG, array('priority' => 0));
+        $container->setDefinition(self::NUBEIRO_DAC_ID . '.context_initializer', $definition);
     }
 }

@@ -1,34 +1,31 @@
 
 default:
     extensions:
-      Nubeiro\DoctrineAwareContext\Extension:
+      Nubeiro\EntityManagerAwareContext\Extension:
         dbal:
             connections:
                 pbiz_users:
                     driver: pdo_mysql
-                    host: 10.10.0.3
-                    dbname: pbiz_users
-                    user: pbiz_users_user
-                    password: pbiz_users_pass
+                    host: localhost
+                    dbname: blog
+                    user: blog_user
+                    password: blog_pass
                 pbiz_datas:
                     driver: pdo_mysql
-                    host: 10.10.0.3
-                    dbname: pbiz_datas
-                    user: pbiz_datas_user
-                    password: pbiz_datas_pass
+                    host: localhost
+                    dbname: statistics
+                    user: statistics_user
+                    password: statistics_pass
         orm:
             entity_managers:
-                users:
-                    connection: pbiz_users
+                blog:
+                    connection: blog_user
                     mappings: [path1, path2]
-                datas:
-                    connection: pbiz_datas
+                statistics:
+                    connection: statistics
                     mappings: [path3, path4]
 
     suites:
         default:
           path: %paths.base%/features
-          contexts: [Nubeiro\DoctrineAwareContext\Context\EntityManagerAwareContext]
-
-
-
+          contexts: [Nubeiro\EntityManagerAwareContext\Context\EntityManagerContext]
