@@ -6,7 +6,8 @@ doctrine's entity managers by name from other contexts.
 ## Setup
 To use it, you need to add it to your behat.yml file: 
 
-.. code-block:: yaml
+
+```yaml
     extensions:
       Nubeiro\EntityManagerAwareContext\Extension:
         dbal:
@@ -31,18 +32,20 @@ To use it, you need to add it to your behat.yml file:
                 statistics:
                     connection: statistics
                     mappings: [path3, path4]
-
+```
 
 ##Usage
 
 Currently, the extension works only with YML mappings for doctrine. 
 
-
 You can setup your suite to use also the EntityManagerContext:
-.. code-block:: yaml
+
+```yaml
         default:
           path: %paths.base%/features
           contexts: [Nubeiro\EntityManagerAwareContext\Context\EntityManagerContext]
+```
+
 
 An then, you can use [Context communication](http://docs.behat.org/en/latest/cookbooks/context_communication.html)
 to access entity manager context from your feature context. 
