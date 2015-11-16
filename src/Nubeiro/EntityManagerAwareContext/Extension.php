@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-
 class Extension implements ExtensionInterface
 {
     const NUBEIRO_DAC_ID = 'nubeiro_dac';
@@ -150,7 +149,7 @@ class Extension implements ExtensionInterface
     {
         $container->setDefinition(
             self::NUBEIRO_DAC_ID,
-            new Definition('Nubeiro\DoctrineAwareContext\ManagerRegistry', array($config))
+            new Definition('Nubeiro\EntityManagerAwareContext\Registry', array($config))
         );
     }
 

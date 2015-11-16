@@ -5,7 +5,6 @@
 
 namespace Nubeiro\EntityManagerAwareContext\Context;
 
-
 use Nubeiro\EntityManagerAwareContext\Registry;
 
 class EntityManagerContext implements EntityManagerAwareContext

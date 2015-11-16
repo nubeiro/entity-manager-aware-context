@@ -1,9 +1,9 @@
 {
-  "name": "nubeiro/doctrine-aware-context",
+  "name": "nubeiro/entity-manager-aware-context",
   "type": "behat-extension",
   "description": "Doctrine aware contexts for Behat",
   "keywords": ["behat", "bdd", "doctrine", "fixtures"],
-  "homepage": "http://github.com/nubeiro/",
+  "homepage": "http://github.com/nubeiro/entity-manager-aware-context",
   "license": "MIT",
   "authors": [
     {

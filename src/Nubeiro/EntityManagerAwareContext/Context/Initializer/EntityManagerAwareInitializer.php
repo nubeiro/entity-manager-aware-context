@@ -37,6 +37,6 @@ class EntityManagerAwareInitializer implements ContextInitializer
             return;
         }
 
-        $context->setManagerRegistry($this->registry);
+        $context->setRegistry($this->registry);
     }
 }
