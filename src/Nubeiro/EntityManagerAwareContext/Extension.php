@@ -98,7 +98,7 @@ class Extension implements ExtensionInterface
                 ->children()
                     ->arrayNode('mappings')
                     ->requiresAtLeastOneElement()
-                    ->prototype('scalar')->end()
+                    ->prototype('variable')->end()
             ->end()
         ;
 
