@@ -1,5 +1,5 @@
 {
-  "name": "nubeiro/entity-manager-aware-context",
+  "name": "rafaeldevalencia/entity-manager-aware-context",
   "type": "behat-extension",
   "description": "Doctrine aware contexts for Behat",
   "keywords": ["behat", "bdd", "doctrine", "fixtures"],
@@ -12,7 +12,7 @@
       "role": "developer"
     }
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "require": {
     "php": "^5.6",
     "behat/behat": "3.*@stable",
