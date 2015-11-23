@@ -6,6 +6,7 @@
 namespace Nubeiro\EntityManagerAwareContext;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\ORM\Tools\Setup;
 
 class Registry
@@ -23,9 +24,9 @@ class Registry
         $managers = $config['orm']['entity_managers'];
         foreach ($managers as $name => $parameters) {
             $isDevMode = true;
-            $config = Setup::createYAMLMetadataConfiguration(
-                $parameters['mappings'],
-                $isDevMode
+            $config = Setup::createConfiguration($isDevMode);
+            $config->setMetadataDriverImpl(
+                new SimplifiedYamlDriver($parameters['mappings'], '.dcm.yml')
             );
             $connection = $parameters['connection'];
             $manager = EntityManager::create($connections[$connection], $config);
