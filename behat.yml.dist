@@ -1,4 +1,3 @@
-
 default:
     extensions:
       Nubeiro\EntityManagerAwareContext\Extension:
@@ -20,11 +19,12 @@ default:
             entity_managers:
                 blog:
                     connection: blog_user
-                    mappings: [path1, path2]
+                    mappings:
+                        %paths.base%/orm/yml/Blog/Entities: 'Blog\Entities'
                 statistics:
                     connection: statistics
-                    mappings: [path3, path4]
-
+                    mappings:
+                        %paths.base%/orm/yml/Statistics/Entities/: 'Statistics\Entities'
     suites:
         default:
           path: %paths.base%/features
